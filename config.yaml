@@ -1,0 +1,47 @@
+server:
+  port: 8080
+  mode: debug  # debug / release
+
+database:
+  driver: sqlite  # mysql / sqlite
+  dsn: "./xzbbs.db"
+  # For MySQL: "user:password@tcp(127.0.0.1:3306)/xzbbs?charset=utf8mb4&parseTime=True&loc=Local"
+
+redis:
+  enabled: false
+  addr: "127.0.0.1:6379"
+  password: ""
+  db: 0
+
+jwt:
+  secret: "change-me-to-a-random-string"
+  expire_hour: 72
+
+upload:
+  path: "./uploads"
+  max_size: 10  # MB
+  allow_ext:
+    - ".jpg"
+    - ".jpeg"
+    - ".png"
+    - ".gif"
+    - ".webp"
+    - ".zip"
+    - ".rar"
+    - ".7z"
+    - ".pdf"
+    - ".doc"
+    - ".docx"
+
+site:
+  name: "XzBBS"
+  brief: "A lightweight forum powered by Go"
+  page_size: 20
+
+email:
+  enabled: false
+  host: "smtp.example.com"
+  port: 587
+  username: "noreply@example.com"
+  password: "your-password"
+  from: "XzBBS <noreply@example.com>"
