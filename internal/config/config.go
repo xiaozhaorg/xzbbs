@@ -1,6 +1,9 @@
 package config
 
 import (
+	"os"
+	"path/filepath"
+
 	"github.com/spf13/viper"
 )
 
@@ -61,6 +64,49 @@ type SiteConfig struct {
 }
 
 var Global *Config
+
+func FindConfig() string {
+	if p := os.Getenv("CONFIG_PATH"); p != "" {
+		return p
+	}
+
+	candidates := []string{
+		"config.yaml",
+		"config.yml",
+		"conf/config.yaml",
+		"conf/config.yml",
+	}
+
+	exe, err := os.Executable()
+	if err == nil {
+		exeDir := filepath.Dir(exe)
+		candidates = append(candidates,
+			filepath.Join(exeDir, "config.yaml"),
+			filepath.Join(exeDir, "config.yml"),
+			filepath.Join(exeDir, "conf", "config.yaml"),
+			filepath.Join(exeDir, "conf", "config.yml"),
+		)
+	}
+
+	for _, c := range candidates {
+		if _, err := os.Stat(c); err == nil {
+			return c
+		}
+	}
+
+	return "config.yaml"
+}
+
+func ResolvePath(p string) string {
+	if filepath.IsAbs(p) {
+		return p
+	}
+	exe, err := os.Executable()
+	if err != nil {
+		return p
+	}
+	return filepath.Join(filepath.Dir(exe), p)
+}
 
 func Load(path string) (*Config, error) {
 	configPath = path

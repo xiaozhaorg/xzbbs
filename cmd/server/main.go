@@ -1,10 +1,11 @@
-﻿package main
+package main
 
 import (
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -22,14 +23,17 @@ import (
 )
 
 func main() {
-	// Load config
-	cfgPath := "config.yaml"
-	if p := os.Getenv("CONFIG_PATH"); p != "" {
-		cfgPath = p
-	}
+	cfgPath := config.FindConfig()
 	cfg, err := config.Load(cfgPath)
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
+	}
+
+	if !filepath.IsAbs(cfg.Upload.Path) {
+		cfg.Upload.Path = config.ResolvePath(cfg.Upload.Path)
+	}
+	if cfg.Database.Driver == "sqlite" && !filepath.IsAbs(cfg.Database.DSN) {
+		cfg.Database.DSN = config.ResolvePath(cfg.Database.DSN)
 	}
 
 	// Connect database
