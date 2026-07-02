@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import api from '@/api'
+import * as bbsApi from '@/api/bbs'
 import type { User } from '@/api/bbs'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -12,7 +12,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function init() {
     if (!token.value) return
     try {
-      const res = await api.getMe()
+      const res: any = await bbsApi.getMe()
       user.value = res.data as User
     } catch {
       token.value = ''
@@ -21,7 +21,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function login(account: string, password: string) {
-    const res = await api.login({ account, password })
+    const res: any = await bbsApi.login({ account, password })
     const data = res.data as { user: User; token: string }
     token.value = data.token
     user.value = data.user
@@ -29,7 +29,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   async function register(username: string, email: string, password: string) {
-    const res = await api.register({ username, email, password })
+    const res: any = await bbsApi.register({ username, email, password })
     const data = res.data as { user: User; token: string }
     token.value = data.token
     user.value = data.user

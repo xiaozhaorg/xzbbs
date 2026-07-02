@@ -3,7 +3,7 @@ import { onMounted, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getThread, createPost, updatePost, toggleFavorite, checkFavorite, type Thread as ThreadType, type Post as PostType } from '@/api/bbs'
 import { useAuthStore } from '@/stores/auth'
-import MarkdownIt from 'marked/markdown-it'
+import MarkdownIt from 'markdown-it'
 import BBEditor from '@/components/BBEditor.vue'
 import SmileyPicker from '@/components/SmileyPicker.vue'
 
